@@ -32,6 +32,19 @@ def product(n, term):
     162
     """
     "*** YOUR CODE HERE ***"
+    """iterate version
+    product, index=1, 1
+    while index<=n:
+        product*=term(index)
+        index+=1
+    return product"""
+    #recursive version
+    def pro(k):
+        if k==1:
+            return term(1) #be attentive to initial statement return
+        else:
+            return pro(k-1)*(term(k))
+    return pro(n)  
 
 
 def accumulate(fuse, start, n, term):
@@ -54,7 +67,10 @@ def accumulate(fuse, start, n, term):
     19
     """
     "*** YOUR CODE HERE ***"
-
+    #recursive method, provided the feature of fuse function given in the instruction
+    if n==0:
+        return start
+    return fuse(accumulate(fuse, start, n-1, term),term(n))
 
 def summation_using_accumulate(n, term):
     """Returns the sum: term(1) + ... + term(n), using accumulate.
@@ -68,7 +84,7 @@ def summation_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
+    return accumulate(add,0,n,term)
 
 
 def product_using_accumulate(n, term):
@@ -83,7 +99,7 @@ def product_using_accumulate(n, term):
     >>> [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
     ['Expr', 'Return']
     """
-    return ____
+    return accumulate(mul,1,n,term)#pay attention to initial value
 
 
 def make_repeater(f, n):
@@ -100,4 +116,18 @@ def make_repeater(f, n):
     390625
     """
     "*** YOUR CODE HERE ***"
-
+    
+    #type error: return f(make_repeater(f,n-1))
+    # >>> make_repeater(f,n-1) is a function
+    #not a value that can be pass to function f
+    
+    def func(x):
+        ans,k=x,1
+        while k<=n:
+            ans,k=f(ans),k+1 
+        return ans
+    return func 
+"""`n` inside `func` function is being treated as a local variable, 
+but it hasn't been defined within the function. 
+In Python, when you use a variable inside a function, 
+Python assumes it's local unless explicitly told otherwise."""
