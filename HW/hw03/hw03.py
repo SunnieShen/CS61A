@@ -27,8 +27,7 @@ def num_eights(n):
     "*** YOUR CODE HERE ***"
     if n==0:
         return 0
-    n, last = n//10, n%10
-    return num_eight(n)+bool(last==8)
+    return num_eights(n//10)+bool(n%10==8)
 
 def digit_distance(n):
     """Determines the digit distance of n.
@@ -50,7 +49,9 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n<10:
+        return 0
+    return digit_distance(n//10)+abs(n//10%10-n%10)
 
 def interleaved_sum(n, odd_func, even_func):
     """Compute the sum odd_func(1) + even_func(2) + odd_func(3) + ..., up
@@ -74,7 +75,14 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def helper(k):
+        if n==k: 
+            return odd_func(k)
+        elif n==k+1:
+            return odd_func(k)+even_func(k+1)
+        else:
+            return odd_func(k)+even_func(k+1)+helper(k+2)
+    return helper(1)
 
 def next_smaller_dollar(bill):
     """Returns the next smaller bill in order."""
@@ -89,7 +97,7 @@ def next_smaller_dollar(bill):
     elif bill == 5:
         return 1
 
-def count_dollars(total):
+def count_dollars(total,largest_dollar=100):
     """Return the number of ways to make change.
 
     >>> count_dollars(15)  # 15 $1 bills, 10 $1 & 1 $5 bills, ... 1 $5 & 1 $10 bills
@@ -110,8 +118,15 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
-
-
+    if total==0:
+        return 1
+    if total<0:
+        return 0
+    if largest_dollar>1:
+        return count_dollars(total-largest_dollar,largest_dollar)+ count_dollars(total,next_smaller_dollar(largest_dollar))
+    else:
+        return count_dollars(total-largest_dollar,1)
+    
 def next_larger_dollar(bill):
     """Returns the next larger bill in order."""
     if bill == 1:
