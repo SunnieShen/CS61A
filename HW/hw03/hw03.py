@@ -25,7 +25,10 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if n==0:
+        return 0
+    n, last = n//10, n%10
+    return num_eight(n)+bool(last==8)
 
 def digit_distance(n):
     """Determines the digit distance of n.
