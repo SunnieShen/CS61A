@@ -37,6 +37,11 @@ def pick(paragraphs, select, k):
     ''
     """
     # BEGIN PROBLEM 1
+    ans_list = [str for str in paragraphs if select(str)]
+    if len(ans_list)<=k:
+        return ''
+    else:
+        return ans_list[k]
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
 
@@ -57,6 +62,13 @@ def about(subject):
     assert all([lower(x) == x for x in subject]), "subjects should be lowercase."
 
     # BEGIN PROBLEM 2
+    def check(paragraph):
+        wordsfrompara = split(lower(remove_punctuation(paragraph)))
+        for words in subject:
+            if words in wordsfrompara:
+                return True
+        return False
+    return check    
     "*** YOUR CODE HERE ***"
     # END PROBLEM 2
 
@@ -87,6 +99,17 @@ def accuracy(typed, source):
     typed_words = split(typed)
     source_words = split(source)
     # BEGIN PROBLEM 3
+    if len(typed_words)==0 and len(source_words)==0:
+        return 100.0
+    elif len(typed_words)*len(source_words)==0:
+        return 0.0
+    count=0
+    for i in range(len(typed_words)):
+        if i>=len(source_words):
+            break
+        elif typed_words[i]==source_words[i]:
+            count+=1
+    return count*100/len(typed_words)
     "*** YOUR CODE HERE ***"
     # END PROBLEM 3
 
@@ -105,6 +128,7 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
+    return len(typed)*12/elapsed
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4
 
@@ -166,6 +190,16 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
+    if typed_word in word_list:
+        return typed_word
+    else:
+        def temp(n):
+            return diff_function(typed_word,n,limit)
+        ans = min(word_list, key= temp)
+        if temp(ans)>limit:
+            return typed_word
+        return ans
+
     "*** YOUR CODE HERE ***"
     # END PROBLEM 5
 
@@ -193,7 +227,16 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if typed=="":
+        # ending condition 1
+        return len(source)
+    elif source=="":
+        # ending condition 2
+        return len(typed)
+    elif typed[0]==source[0]:
+        return furry_fixes(typed[1:],source[1:],limit)
+    else:
+        return 1+furry_fixes(typed[1:],source[1:],limit)
     # END PROBLEM 6
 
 
